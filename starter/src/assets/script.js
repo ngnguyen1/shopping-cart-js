@@ -1,3 +1,4 @@
+let totalPaid = 0;
 /* Create an array named products which you will use to add all of your product object literals that you create in the next step. */
 const products = [];
 
@@ -15,7 +16,7 @@ const product1 = {
   price: 2.99,
   quantity: 0,
   productId: 1,
-  image: "/images/cherry.jpg"
+  image: "./images/cherry.jpg"
 };
 
 const product2 = {
@@ -23,7 +24,7 @@ const product2 = {
   price: 1.99,
   quantity: 0,
   productId: 2,
-  image: "/images/orange.jpg"
+  image: "./images/orange.jpg"
 };
 
 const product3 = {
@@ -31,7 +32,7 @@ const product3 = {
   price: 3.49,
   quantity: 0,
   productId: 3,
-  image: "/images/strawberry.jpg"
+  image: "./images/strawberry.jpg"
 };
 
 products.push(product1, product2, product3);
@@ -75,10 +76,7 @@ function decreaseQuantity(productId) {
   if (product) {
    product.quantity--;
    if (product.quantity === 0) {
-    const index = cart.indexOf(product);
-    if (index !== -1) {
-      cart.splice(index, 1);
-    }
+    removeProductFromCart(productId);
    }
   }
 }
@@ -114,6 +112,9 @@ function cartTotal() {
 
 /* Create a function called emptyCart that empties the products from the cart */
 function emptyCart() {
+  for (const product of cart) {
+    product.quantity = 0;
+  }
   cart.length = 0;
 }
 
@@ -124,8 +125,13 @@ function emptyCart() {
   Hint: cartTotal function gives us cost of all the products in the cart
 */
 function pay(amount) {
-  const total = cartTotal();
-  return amount - total;
+  totalPaid += amount;
+  let remaining = totalPaid - cartTotal();
+  if (remaining >= 0) {
+    totalPaid = 0;
+    emptyCart();
+  }
+  return remaining;
 }
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
